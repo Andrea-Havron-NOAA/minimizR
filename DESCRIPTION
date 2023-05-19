@@ -1,12 +1,12 @@
 Package: rmin
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Minimizes an objective function.
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Matthew Supernaw
+Maintainer: matthew.supernaw@noaa.gov
+Description:  Minimizes an objective function using the 
+l-bfgs algorithm and line searching with wolfe conditions. 
+License: None
 Encoding: UTF-8
 LazyData: true
 Imports: Rcpp (>= 1.0.10)
