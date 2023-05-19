@@ -310,7 +310,7 @@ Rcpp::List minimize(
       }
       results["method"] = "l-bfgs";
       results["converged"] = true;
-      results["message"] = "NA";
+      results["message"] = "converged";
       results["iterations"] = iteration;
       results["runtime (seconds)"] = elapsed_seconds.count();
       results["function value"] = fx;
