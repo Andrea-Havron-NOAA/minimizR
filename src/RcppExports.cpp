@@ -12,7 +12,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // minimize
 Rcpp::List minimize(Rcpp::NumericVector par, Rcpp::Function fn, Rcpp::Function gr, Rcpp::Nullable<Rcpp::List> control);
-RcppExport SEXP _rmin_minimize(SEXP parSEXP, SEXP fnSEXP, SEXP grSEXP, SEXP controlSEXP) {
+RcppExport SEXP _minimizR_minimize(SEXP parSEXP, SEXP fnSEXP, SEXP grSEXP, SEXP controlSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -26,11 +26,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rmin_minimize", (DL_FUNC) &_rmin_minimize, 4},
+    {"_minimizR_minimize", (DL_FUNC) &_minimizR_minimize, 4},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_rmin(DllInfo *dll) {
+RcppExport void R_init_minimizR(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

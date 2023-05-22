@@ -1,4 +1,4 @@
-library(rmin)
+library(minimizR)
 
 
 Cos<-function(x){

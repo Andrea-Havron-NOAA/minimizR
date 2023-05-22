@@ -2,6 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 minimize <- function(par, fn, gr, control = NULL) {
-    .Call(`_rmin_minimize`, par, fn, gr, control)
+    .Call(`_minimizR_minimize`, par, fn, gr, control)
 }
 
