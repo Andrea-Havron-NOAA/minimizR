@@ -1,4 +1,4 @@
-Package: rmin
+Package: minimizR
 Type: Package
 Title: Function minimizer for R.
 Version: 1.0
