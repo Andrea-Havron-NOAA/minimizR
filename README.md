@@ -1,2 +1,2 @@
-# rmin
+# minimizR
 Function minimizer for R
