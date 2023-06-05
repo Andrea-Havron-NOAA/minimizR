@@ -109,17 +109,19 @@ inline double transform_internal_2_external(
 }
 
 /**
- * Sine transformation for external t0 internal.
+ * Sine transformation for external to internal.
  */
 inline double transform_external_2_internal(
         const double& value,
         const double&minb,
         const double&maxb) {
     return std::asin((2.0 * (value - minb) / (maxb - minb)) - 1.0);
-
     //    return std::atanh(2.0 * (value - minb) / (maxb - minb) - 1.0);
 }
 
+/**
+ * Sine transformation for internal derivative to external.
+ */
 inline double transform_derivative_internal_2_external(
         const double& value,
         const double&minb,
@@ -129,10 +131,32 @@ inline double transform_derivative_internal_2_external(
     //    return 2.0 / ((maxb - minb) * std::pow((1.0 - ((2.0 * (value - minb)) / maxb - minb - 1.0)), 2.0));
 }
 
-void find_r_xmin_xmax(double& xmin,
-        double& xmax) {
-
-}
+//void find_r_xmin_xmax(double& xmin,
+//        double& xmax) {
+//
+//    Rcpp::Environment env = Rcpp::Environment::global_env();
+//    Rcpp::List l = Rcpp::as<Rcpp::List>(env.ls(true));
+//    SEXP e, E, EE;
+//    std::stringstream ss;
+//    ss << "capture.output(show(.Machine$double.xmax))"; //, file = NULL, append = FALSE, type = c(\"output\", \"message\"), split = FALSE)";
+//
+//
+//    SEXP expression, result;
+//    ParseStatus status;
+//
+//    PROTECT(expression = R_ParseVector(Rf_mkString(ss.str().c_str()), 1, &status, R_NilValue));
+//
+//    if (status != PARSE_OK) {
+//        std::cout << "Error parsing expression" << std::endl;
+//        UNPROTECT(1);
+//    }
+//
+//    PROTECT(result = Rf_eval(VECTOR_ELT(expression, 0), R_GlobalEnv));
+//    
+//    double xmax_r  = Rcpp::as<double>(result);
+//    
+//
+//}
 
 void update_value(
         double& parameter,
@@ -155,11 +179,39 @@ void get_working_derivative(double& value,
 
 }
 
+Rcpp::NumericMatrix calculateHessian(Rcpp::Function gradFunc, Rcpp::NumericVector x, double h = 1e-4) {
+    int n = x.size();
+    Rcpp::NumericMatrix hessian(n, n);
+
+    for (int i = 0; i < n; i++) {
+        Rcpp::NumericVector x_plus_h = clone(x);
+        Rcpp::NumericVector x_minus_h = clone(x);
+        double xi = x[i];
+
+        x_plus_h[i] = xi + h;
+        x_minus_h[i] = xi - h;
+
+        Rcpp::NumericVector grad_plus_h = gradFunc(x_plus_h);
+        Rcpp::NumericVector grad_minus_h = gradFunc(x_minus_h);
+
+        for (int j = 0; j < n; j++) {
+            double hessian_val = (grad_plus_h[j] - grad_minus_h[j]) / (2 * h);
+            hessian(i, j) = hessian_val;
+        }
+    }
+
+    return hessian;
+}
+
 bool line_search(Rcpp::Function fn,
         Rcpp::Function gr,
         double& fx,
         double& function_value,
         std::valarray<double>& x,
+        std::valarray<double>& wx,
+        Rcpp::NumericVector& minb,
+        Rcpp::NumericVector& maxb,
+        std::vector<bool> bounded_parameter,
         std::valarray<double>& best,
         std::valarray<double>& z,
         std::valarray<double>& gradient,
@@ -215,8 +267,17 @@ bool line_search(Rcpp::Function fn,
     for (ls = 0; ls < max_line_searches; ++ls) {
 
         // Tentative solution, gradient and loss
-        std::valarray<double> nx = x - step * z;
+        std::valarray<double> nx = x - step * z; //(nops); // = x - step * z;
 
+        //        for (size_t j = 0; j < nops; j++) {
+        //            nx[j] = wx[j] - step * z[j];
+        //
+        //            if (bounded_parameter[j]) {
+        //                nx[j] = temp;//transform_internal_2_external(temp, minb[j], maxb[j]);
+        //            } else {
+        //                nx[j] = temp;
+        //            }
+        //        }
 
 
         //line_search:
@@ -225,7 +286,11 @@ bool line_search(Rcpp::Function fn,
         if (fx <= function_value + tolerance * (10e-4) * step * descent) { // First Wolfe condition
 
             for (size_t j = 0; j < nops; j++) {
-                best[j] = nx[j];
+                if (bounded_parameter[j]) {
+                    best[j] = transform_internal_2_external(nx[j], minb[j], maxb[j]);
+                } else {
+                    best[j] = nx[j];
+                }
             }
 
 
@@ -237,15 +302,24 @@ bool line_search(Rcpp::Function fn,
 
             if (down || (-1.0 * Dot(z, ng) >= 0.9 * descent)) { // Second Wolfe condition
                 x = nx;
+                for (size_t j = 0; j < nops; j++) {
+
+                    if (bounded_parameter[j]) {
+                        wx[j] = transform_external_2_internal(nx[j], minb[j], maxb[j]);
+                    } else {
+                        wx[j] = nx[j];
+                    }
+                }
+
                 gradient = ng;
                 function_value = fx;
                 return true;
             } else {
 
-                step *= 2.0; //*= 10.0; //2.0; //10.0;
+                step *= 10.0; //2.0; //10.0;
             }
         } else {
-            step *= .5; /// /= 10.0; //*= .5; ///
+            step /= 10.0; //*= .5; ///
             down = true;
         }
     }
@@ -282,11 +356,13 @@ Rcpp::List minimize(
     bool converged = false;
     bool bounded = false;
     bool error = false;
-    double xmin, xmax;
-    std::vector<bool> bounded_parameter;
+    double xmin = -1.0 * std::numeric_limits<double>::max();
+    double xmax = std::numeric_limits<double>::max();
+    std::vector<bool> bounded_parameter(par.size(), false);
     Rcpp::List results;
-    Rcpp::NumericVector minb;
-    Rcpp::NumericVector maxb;
+    Rcpp::NumericVector minb; //(par.size(), xmin);
+    Rcpp::NumericVector maxb; //(par.size(), xmax);
+
 
     Rcpp::List ctrl(control);
     if (control.isNotNull()) {
@@ -322,7 +398,7 @@ Rcpp::List minimize(
 
         if (ctrl.containsElementNamed("maxb")) {
             bounded = true;
-            minb = ctrl["maxb"];
+            maxb = ctrl["maxb"];
         }
 
     }
@@ -350,13 +426,19 @@ Rcpp::List minimize(
     //begin initialization
     int nops = par.size();
 
-    std::valarray<double> x, best, gradient;
+    std::valarray<double> x, wx, best, gradient;
 
     x.resize(nops);
+    wx.resize(nops);
     best.resize(nops);
     gradient.resize(nops);
 
     for (int i = 0; i < nops; i++) {
+        if (bounded_parameter[i]) {
+            wx[i] = transform_external_2_internal(par[i], minb[i], maxb[i]);
+        } else {
+            wx[i] = par[i];
+        }
         x[i] = par[i];
         gradient[i] = 0;
     }
@@ -370,7 +452,7 @@ Rcpp::List minimize(
 
     //initial evaluation
     double fx(0.0);
-    fx = Rcpp::as<double>(fn(to_nvector(x))); //internal_evaluate(x);
+    fx = Rcpp::as<double>(fn(par)); //internal_evaluate(x);
     function_value = fx;
 
     //Historical evaluations
@@ -384,12 +466,13 @@ Rcpp::List minimize(
 
 
     //initial gradient
-    gradient = from_nvector(gr(to_nvector(x)));
+    gradient = from_nvector(gr(par)); //to_nvector(par)));
     maxgc = mgc(gradient);
 
     if (error) {
         results["method"] = "l-bfgs";
         results["converged"] = false;
+        results["bounded problem"] = bounded;
         results["message"] = error_stream.str();
         results["iterations"] = 0;
         results["runtime (seconds)"] = 0;
@@ -397,6 +480,7 @@ Rcpp::List minimize(
         results["norm gradient"] = norm(rgrad);
         results["max gradient component"] = maxgc;
         results["gradient"] = rgrad;
+//        results["hessian"] = calculateHessian(gr, rx);
         results["parameter values"] = rx;
 
         return results;
@@ -405,7 +489,7 @@ Rcpp::List minimize(
 
     //if bounded, specify which parameters have numeric bounds
     if (bounded) {
-        find_r_xmin_xmax(xmin, xmax);
+        //        find_r_xmin_xmax(xmin, xmax);
 
         bounded_parameter.resize(par.size());
         //not all parameters are necessarily bounded.
@@ -430,7 +514,15 @@ Rcpp::List minimize(
         i = iteration;
 
         for (int j = 0; j < nops; j++) {
-            wg[j] = gradient[j];
+            if (bounded_parameter[i]) {
+                wx[j] = transform_external_2_internal(x[j], minb[j], maxb[j]);
+                wg[j] = transform_derivative_internal_2_external(wx[j],
+                        minb[j], maxb[j]) *
+                        gradient[j];
+            } else {
+                wg[j] = gradient[j];
+                wx[j] = x[j];
+            }
         }
 
         if (((i % iprint) == 0) && verbose) {
@@ -448,6 +540,7 @@ Rcpp::List minimize(
             }
             results["method"] = "l-bfgs";
             results["converged"] = true;
+            results["bounded problem"] = bounded;
             results["message"] = "converged";
             results["iterations"] = iteration;
             results["runtime (seconds)"] = elapsed_seconds.count();
@@ -455,6 +548,7 @@ Rcpp::List minimize(
             results["norm gradient"] = norm(rgrad);
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
+//            results["hessian"] = calculateHessian(gr, rx);
             results["parameter values"] = rx;
 
             return results;
@@ -469,7 +563,7 @@ Rcpp::List minimize(
 
             //update histories
             for (size_t r = 0; r < nops; r++) {
-                dxs[r][end] = x[r] - px[r];
+                dxs[r][end] = wx[r] - px[r];
                 dgs[r][end] = wg[r] - pg[r];
             }
 
@@ -494,7 +588,7 @@ Rcpp::List minimize(
         }//end if(i>0)
 
         for (size_t j = 0; j < nops; j++) {
-            px[j] = x[j];
+            px[j] = wx[j];
             //            x[j] = px[j];
             pg[j] = wg[j];
 
@@ -504,13 +598,17 @@ Rcpp::List minimize(
 
 
 
-
         double fv = function_value;
+
         if (!line_search(fn,
                 gr,
                 fx,
                 function_value,
                 x,
+                wx,
+                minb,
+                maxb,
+                bounded_parameter,
                 best,
                 z,
                 gradient,
@@ -531,8 +629,9 @@ Rcpp::List minimize(
                 converged = true;
             }
 
-            results["mehtod"] = "l-bfgs";
+            results["method"] = "l-bfgs";
             results["converged"] = converged;
+            results["bounded problem"] = bounded;
             results["message"] = "max line searches";
             results["iterations"] = iteration;
             results["runtime (seconds)"] = elapsed_seconds.count();
@@ -540,6 +639,7 @@ Rcpp::List minimize(
             results["norm gradient"] = norm(rgrad);
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
+//            results["hessian"] = calculateHessian(gr, rx);
             results["parameter values"] = rx;
 
             return results;
@@ -561,6 +661,7 @@ Rcpp::List minimize(
             }
             results["method"] = "l-bfgs";
             results["converged"] = converged;
+            results["bounded problem"] = bounded;
             results["message"] = "no progress";
             results["iterations"] = iteration;
             results["runtime (seconds)"] = elapsed_seconds.count();
@@ -568,6 +669,7 @@ Rcpp::List minimize(
             results["norm gradient"] = norm(rgrad);
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
+//            results["hessian"] = calculateHessian(gr, rx);
             results["parameter values"] = rx;
             return results;
         } else {
@@ -589,6 +691,7 @@ Rcpp::List minimize(
 
     results["method"] = "l-bfgs";
     results["converged"] = converged;
+    results["bounded problem"] = bounded;
     results["message"] = "max iterations";
     results["iterations"] = i;
     results["runtime (seconds)"] = elapsed_seconds.count();
@@ -596,6 +699,7 @@ Rcpp::List minimize(
     results["norm gradient"] = norm(rgrad);
     results["max gradient component"] = maxgc;
     results["gradient"] = rgrad;
+//    results["hessian"] = calculateHessian(gr, rx);
     results["parameter values"] = rx;
 
     std::cout << "Max iterations!\n\n";
