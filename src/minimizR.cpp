@@ -432,10 +432,43 @@ Rcpp::List minimize(
     wx.resize(nops);
     best.resize(nops);
     gradient.resize(nops);
+    
+    
+    //if bounded, specify which parameters have numeric bounds
+    if (bounded) {
+        //        find_r_xmin_xmax(xmin, xmax);
+
+        bounded_parameter.resize(par.size());
+        //not all parameters are necessarily bounded.
+        std::fill(bounded_parameter.begin(), bounded_parameter.end(), false);
+
+        //find the bounded parameters.
+        for (size_t i = 0; i < par.size(); i++) {
+            if (minb[i] != xmin || maxb[i] != xmax) {
+                bounded_parameter[i] = true;
+            }
+        }
+
+    }
+
 
     for (int i = 0; i < nops; i++) {
+     
         if (bounded_parameter[i]) {
+
+            if (par[i] < minb[i]) {
+                error_stream << "Error: parameter[" << i + 1 << "] less than minb[" << i + 1 << "]. "<<std::endl;
+                error = true;
+               
+            }
+
+            if (par[i] > maxb[i]) {
+                error_stream << "Error: parameter[" << i + 1 << "] greater than maxb[" << i + 1 << "]. "<<std::endl;
+                error = true;
+            }
+            
             wx[i] = transform_external_2_internal(par[i], minb[i], maxb[i]);
+
         } else {
             wx[i] = par[i];
         }
@@ -480,29 +513,12 @@ Rcpp::List minimize(
         results["norm gradient"] = norm(rgrad);
         results["max gradient component"] = maxgc;
         results["gradient"] = rgrad;
-//        results["hessian"] = calculateHessian(gr, rx);
-        results["parameter values"] = rx;
+        //        results["hessian"] = calculateHessian(gr, rx);
+        results["parameter values"] = par;
 
         return results;
     }
 
-
-    //if bounded, specify which parameters have numeric bounds
-    if (bounded) {
-        //        find_r_xmin_xmax(xmin, xmax);
-
-        bounded_parameter.resize(par.size());
-        //not all parameters are necessarily bounded.
-        std::fill(bounded_parameter.begin(), bounded_parameter.end(), false);
-
-        //find the bounded parameters.
-        for (size_t i = 0; i < par.size(); i++) {
-            if (minb[i] != xmin || maxb[i] != xmax) {
-                bounded_parameter[i] = true;
-            }
-        }
-
-    }
 
 
 
@@ -548,7 +564,7 @@ Rcpp::List minimize(
             results["norm gradient"] = norm(rgrad);
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
-//            results["hessian"] = calculateHessian(gr, rx);
+            //            results["hessian"] = calculateHessian(gr, rx);
             results["parameter values"] = rx;
 
             return results;
@@ -639,7 +655,7 @@ Rcpp::List minimize(
             results["norm gradient"] = norm(rgrad);
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
-//            results["hessian"] = calculateHessian(gr, rx);
+            //            results["hessian"] = calculateHessian(gr, rx);
             results["parameter values"] = rx;
 
             return results;
@@ -669,7 +685,7 @@ Rcpp::List minimize(
             results["norm gradient"] = norm(rgrad);
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
-//            results["hessian"] = calculateHessian(gr, rx);
+            //            results["hessian"] = calculateHessian(gr, rx);
             results["parameter values"] = rx;
             return results;
         } else {
@@ -699,7 +715,7 @@ Rcpp::List minimize(
     results["norm gradient"] = norm(rgrad);
     results["max gradient component"] = maxgc;
     results["gradient"] = rgrad;
-//    results["hessian"] = calculateHessian(gr, rx);
+    //    results["hessian"] = calculateHessian(gr, rx);
     results["parameter values"] = rx;
 
     std::cout << "Max iterations!\n\n";
