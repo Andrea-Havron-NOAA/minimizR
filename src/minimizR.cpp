@@ -269,15 +269,15 @@ bool line_search(Rcpp::Function fn,
         // Tentative solution, gradient and loss
         std::valarray<double> nx = x - step * z; //(nops); // = x - step * z;
 
-        //        for (size_t j = 0; j < nops; j++) {
-        //            nx[j] = wx[j] - step * z[j];
-        //
-        //            if (bounded_parameter[j]) {
-        //                nx[j] = temp;//transform_internal_2_external(temp, minb[j], maxb[j]);
-        //            } else {
-        //                nx[j] = temp;
-        //            }
-        //        }
+//                for (size_t j = 0; j < nops; j++) {
+//                    nx[j] = wx[j] - step * z[j];
+//                    double temp = nx[j];
+//                    if (bounded_parameter[j]) {
+//                        nx[j] = transform_internal_2_external(temp, minb[j], maxb[j]);
+//                    } else {
+//                        nx[j] = temp;
+//                    }
+//                }
 
 
         //line_search:
@@ -446,6 +446,7 @@ Rcpp::List minimize(
         for (size_t i = 0; i < par.size(); i++) {
             if (minb[i] != xmin || maxb[i] != xmax) {
                 bounded_parameter[i] = true;
+                std::cout <<"parameter "<<i<<" is bounded!\n";
             }
         }
 

@@ -1,5 +1,5 @@
 ---
-title: "minimizR with TMB"
+title: "minimizR with Template Model Builder"
 output: github_document
 ---
 
@@ -9,11 +9,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## About Template Model Builder
 
-Template Model Builder is a framework that uses Automatic Differentiation to fit models to data.More information can be found at https://github.com/kaskr/adcomp.
+Template Model Builder is a framework that uses Automatic Differentiation to fit models to data. More information can be found at <https://cran.r-project.org/web/packages/TMB/index.html>. 
 
-## R Code Using miniimizR with TMB
+## R Code Using minimizR with TMB
 
-Below is the TMB thetalog example using minimizR. The original code can be found at https://github.com/kaskr/adcomp/tree/master/tmb_examples.
+Below is the TMB thetalog example using minimizR. The original code can be found at <https://github.com/kaskr/adcomp/tree/master/tmb_examples>.
 
 ```{r tmb}
 library(minimizR)
@@ -39,22 +39,26 @@ parameters <- list(
 obj <- MakeADFun(data, parameters, random="X", DLL="thetalog", silent = TRUE)
 newtonOption(obj, smartsearch=FALSE)
 ```
-## Initial function value and gradient
+
+## Initial Function Value And Gradient
+
 ```{r tmb2}
 obj$fn()
 obj$gr()
 ```
 
-## Run the minimizer and view the results
+## Run The Minimizer and View The Results
+
 ```{r tmb3}
 #Fit the model
 opt <- minimizR::minimize(obj$par, obj$fn, obj$gr)
 print(opt)
 ```
-## View the SD Report
+
+## View The SD Report From TMB
+
 ```{r tmb4}
 rep <- sdreport(obj)
 print(rep)
 
 ```
-
