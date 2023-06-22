@@ -48,7 +48,7 @@ obj$gr()
 ## Run the minimizer and view the results
 ```{r tmb3}
 #Fit the model
-opt <- minimizR::minimize(obj$par, obj$fn, obj$gr)
+opt <- minimizR(obj$par, obj$fn, obj$gr)
 print(opt)
 ```
 ## View the SD Report

@@ -152,9 +152,9 @@ inline double transform_derivative_internal_2_external(
 //    }
 //
 //    PROTECT(result = Rf_eval(VECTOR_ELT(expression, 0), R_GlobalEnv));
-//    
+//
 //    double xmax_r  = Rcpp::as<double>(result);
-//    
+//
 //
 //}
 
@@ -269,15 +269,15 @@ bool line_search(Rcpp::Function fn,
         // Tentative solution, gradient and loss
         std::valarray<double> nx = x - step * z; //(nops); // = x - step * z;
 
-        //        for (size_t j = 0; j < nops; j++) {
-        //            nx[j] = wx[j] - step * z[j];
-        //
-        //            if (bounded_parameter[j]) {
-        //                nx[j] = temp;//transform_internal_2_external(temp, minb[j], maxb[j]);
-        //            } else {
-        //                nx[j] = temp;
-        //            }
-        //        }
+//                for (size_t j = 0; j < nops; j++) {
+//                    nx[j] = wx[j] - step * z[j];
+//                    double temp = nx[j];
+//                    if (bounded_parameter[j]) {
+//                        nx[j] = transform_internal_2_external(temp, minb[j], maxb[j]);
+//                    } else {
+//                        nx[j] = temp;
+//                    }
+//                }
 
 
         //line_search:
@@ -338,7 +338,7 @@ bool line_search(Rcpp::Function fn,
 
 // [[Rcpp::export]]
 
-Rcpp::List minimize(
+Rcpp::List minimizR(
         Rcpp::NumericVector par,
         Rcpp::Function fn,
         Rcpp::Function gr,
@@ -391,14 +391,14 @@ Rcpp::List minimize(
             }
         }
 
-        if (ctrl.containsElementNamed("minb")) {
+        if (ctrl.containsElementNamed("lb")) {
             bounded = true;
-            minb = ctrl["minb"];
+            minb = ctrl["lb"];
         }
 
-        if (ctrl.containsElementNamed("maxb")) {
+        if (ctrl.containsElementNamed("ub")) {
             bounded = true;
-            maxb = ctrl["maxb"];
+            maxb = ctrl["ub"];
         }
 
     }
@@ -446,6 +446,7 @@ Rcpp::List minimize(
         for (size_t i = 0; i < par.size(); i++) {
             if (minb[i] != xmin || maxb[i] != xmax) {
                 bounded_parameter[i] = true;
+                std::cout <<"parameter "<<i<<" is bounded!\n";
             }
         }
 
@@ -722,4 +723,3 @@ Rcpp::List minimize(
 
     return results;
 }
-

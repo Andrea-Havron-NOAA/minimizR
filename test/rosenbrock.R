@@ -13,6 +13,6 @@ gradient <- function(x) {
 
 x<-c(-1.2, 0)
 
-opt<-minimize(x,objective, gradient, control = list(tolerance = 1e-8, minb = c(-1.5, -1.5), maxb = c(1.5,1.5)))
+opt<-minimizR(x,objective, gradient, control = list(tolerance = 1e-8, minb = c(-1.5, -1.5), maxb = c(1.5,1.5)))
 #opt <- optim(x, objective, gradient, method = "BFGS", control= list(trace = 2))
 print(opt)
