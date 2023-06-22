@@ -1,0 +1,4 @@
+"0","fishing_fleet_index <- new(fims$Index, nyears)
+"
+"2","Error: object 'fims' not found
+"

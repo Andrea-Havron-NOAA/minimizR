@@ -1,0 +1,32 @@
+{
+    "id": "085C320C",
+    "path": "~/minimizR-Testing/numeric_bounds/minimizR/vignettes/minimizeR_TMB.Rmd",
+    "project_path": "vignettes/minimizeR_TMB.Rmd",
+    "type": "r_markdown",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1686081505430.0,
+    "source_on_save": true,
+    "relative_order": 5,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "59,11",
+        "scrollLine": "52",
+        "rmdVisualMode": "false",
+        "rmdVisualWrapConfigured": "true",
+        "docOutlineVisible": "1",
+        "rmdVisualModeLocation": "250:0",
+        "rmdVisualCollapsedChunks": ""
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1687464911,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1687464911278,
+    "read_only": false,
+    "read_only_alternatives": []
+}

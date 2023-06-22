@@ -1,0 +1,12 @@
+Package: minimizR
+Type: Package
+Title: Function minimizer for R.
+Version: 1.0
+Date: 2023-04-24
+Author: Matthew Supernaw
+Maintainer: Matthew Supernaw <matthew.supernaw@noaa.gov>
+Description: Minimizes an objective function using the l-bfgs algorithm and a line search with strong Wolfe conditions.
+License: None
+Imports: Rcpp (>= 1.0.10)
+LinkingTo: Rcpp
+RoxygenNote: 7.2.3

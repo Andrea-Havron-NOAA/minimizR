@@ -1,0 +1,27 @@
+{
+    "id": "F3C30DFE",
+    "path": "~/FIMS-Testing/vignette_2/FIMS/vignettes/fims-demo.Rmd",
+    "project_path": null,
+    "type": "r_markdown",
+    "hash": "97032567",
+    "contents": "",
+    "dirty": false,
+    "created": 1687279827604.0,
+    "source_on_save": true,
+    "relative_order": 15,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "309,40",
+        "scrollLine": "307",
+        "last_setup_crc32": ""
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1687451505,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1687451505111,
+    "read_only": false,
+    "read_only_alternatives": []
+}

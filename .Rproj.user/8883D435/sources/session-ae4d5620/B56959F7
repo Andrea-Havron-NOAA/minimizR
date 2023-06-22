@@ -1,0 +1,26 @@
+{
+    "id": "B56959F7",
+    "path": "~/minimizR-Testing/numeric_bounds/minimizR/test/rosenbrock.R",
+    "project_path": "test/rosenbrock.R",
+    "type": "r_source",
+    "hash": "2935766646",
+    "contents": "",
+    "dirty": false,
+    "created": 1686079814135.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "17,0",
+        "scrollLine": "1"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1687465340,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1687465340420,
+    "read_only": false,
+    "read_only_alternatives": []
+}
