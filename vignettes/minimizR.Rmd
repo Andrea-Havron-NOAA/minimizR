@@ -39,7 +39,8 @@ opt<-minimizR(x,                   #initial parameters values
              control = list(       #control list
              tolerance = 1e-4,     #convergence criteria
              verbose = TRUE,       #print status
-             iprint = 10))         #print interval
+             iprint = 10,          #print interval
+             hessian = TRUE))      #include hessian in the output 
 ```
 
 ## Output
@@ -78,7 +79,8 @@ opt<-minimizR(x,                    #initial parameters values
               lb = c(-1.5, -1.5),   #lower bounds
               ub = c(1.5,1.5),      #upper bounds
               verbose = TRUE,       #print status
-              iprint = 10))         #print interval
+              iprint = 10,          #print interval
+              hessian = TRUE))      #include hessian in the output 
 
 ```
 
