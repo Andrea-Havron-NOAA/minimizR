@@ -362,7 +362,7 @@ Rcpp::List minimizR(
     Rcpp::List results;
     Rcpp::NumericVector minb; //(par.size(), xmin);
     Rcpp::NumericVector maxb; //(par.size(), xmax);
-
+    bool do_hessian = false;
 
 
     Rcpp::List ctrl(control);
@@ -400,6 +400,10 @@ Rcpp::List minimizR(
         if (ctrl.containsElementNamed("ub")) {
             bounded = true;
             maxb = ctrl["ub"];
+        }
+        
+        if (ctrl.containsElementNamed("hessian")) {
+            do_hessian = Rcpp::as<bool>(ctrl["hessian"]);
         }
 
     }
@@ -515,7 +519,9 @@ Rcpp::List minimizR(
         results["norm gradient"] = norm(rgrad);
         results["max gradient component"] = maxgc;
         results["gradient"] = rgrad;
-        //        results["hessian"] = calculateHessian(gr, rx);
+        if(do_hessian){
+            results["hessian"] = calculateHessian(gr, rx);
+        }
         results["parameter values"] = par;
 
         return results;
@@ -566,7 +572,9 @@ Rcpp::List minimizR(
             results["norm gradient"] = norm(rgrad);
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
-            //            results["hessian"] = calculateHessian(gr, rx);
+            if(do_hessian){
+                results["hessian"] = calculateHessian(gr, rx);
+            }
             results["parameter values"] = rx;
 
             return results;
@@ -657,7 +665,9 @@ Rcpp::List minimizR(
             results["norm gradient"] = norm(rgrad);
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
-            //            results["hessian"] = calculateHessian(gr, rx);
+            if(do_hessian){
+                results["hessian"] = calculateHessian(gr, rx);
+            }
             results["parameter values"] = rx;
 
             return results;
@@ -687,7 +697,9 @@ Rcpp::List minimizR(
             results["norm gradient"] = norm(rgrad);
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
-            //            results["hessian"] = calculateHessian(gr, rx);
+            if(do_hessian){
+                results["hessian"] = calculateHessian(gr, rx);
+            }
             results["parameter values"] = rx;
             return results;
         } else {
@@ -717,7 +729,9 @@ Rcpp::List minimizR(
     results["norm gradient"] = norm(rgrad);
     results["max gradient component"] = maxgc;
     results["gradient"] = rgrad;
-    //    results["hessian"] = calculateHessian(gr, rx);
+    if(do_hessian){
+        results["hessian"] = calculateHessian(gr, rx);
+    }
     results["parameter values"] = rx;
 
     std::cout << "Max iterations!\n\n";

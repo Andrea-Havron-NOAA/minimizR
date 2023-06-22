@@ -22,13 +22,13 @@ Unconstrained and box-constrained optimization using the L-BFGS routine.
 
   \item{tolerance}{Convergence criteria. When the maximum gradient component is less than or equal to this value, the routine will return the results. Default is 1e-4.}
 
-  \item{verbose}{If true, runtime information will be printed to the console. Default is true. }
+  \item{verbose}{If TRUE, runtime information will be printed to the console. Default is TRUE. }
 
  \item{iprint}{Print interval. Default is every 10 iterations.}
 
  \item{lb}{numeric vector of lower bounds. Must be the same size as start. }
 
- \item{ub}{numeric vector of upper bounds. Must be the same size as start. }
+ \item{hessian}{If TRUE, the hessian matrix will be included in the output. Default is FALSE. }
   }
 }
 

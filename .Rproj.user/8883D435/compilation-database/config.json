@@ -9,15 +9,14 @@
         "-I/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/Rcpp/include",
         "-DEIGEN_DONT_VECTORIZE",
         "-I/Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include",
-        "-I/usr/local/include",
-        "-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1",
-        "-I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/14.0.3/include",
-        "-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include",
-        "-I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"
+        "-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1",
+        "-I/Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include",
+        "-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include",
+        "-I/Library/Developer/CommandLineTools/usr/include"
     ],
     "pch": "Rcpp",
     "is_cpp": true,
-    "hash": "1684778940",
+    "hash": "1687445292",
     "compiler": "5543005649470140914",
     "rversion": "4.3.0",
     "dbversion": 4
