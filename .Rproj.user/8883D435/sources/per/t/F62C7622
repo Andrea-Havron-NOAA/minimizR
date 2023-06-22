@@ -1,0 +1,26 @@
+{
+    "id": "F62C7622",
+    "path": "~/rprojects/minimizR/src/RcppExports.cpp",
+    "project_path": "src/RcppExports.cpp",
+    "type": "cpp",
+    "hash": "1945725817",
+    "contents": "",
+    "dirty": false,
+    "created": 1684779080331.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "13,48",
+        "scrollLine": "6"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1684779100,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1684779100,
+    "read_only": true,
+    "read_only_alternatives": []
+}
