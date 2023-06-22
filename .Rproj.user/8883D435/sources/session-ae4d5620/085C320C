@@ -3,7 +3,7 @@
     "path": "~/minimizR-Testing/numeric_bounds/minimizR/vignettes/minimizeR_TMB.Rmd",
     "project_path": "vignettes/minimizeR_TMB.Rmd",
     "type": "r_markdown",
-    "hash": "0",
+    "hash": "296810041",
     "contents": "",
     "dirty": false,
     "created": 1686081505430.0,
@@ -13,7 +13,7 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "59,11",
+        "cursorPosition": "64,0",
         "scrollLine": "52",
         "rmdVisualMode": "false",
         "rmdVisualWrapConfigured": "true",
@@ -22,11 +22,11 @@
         "rmdVisualCollapsedChunks": ""
     },
     "folds": "",
-    "lastKnownWriteTime": 1687464911,
+    "lastKnownWriteTime": 1687468538,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1687464911278,
+    "last_content_update": 1687468538307,
     "read_only": false,
     "read_only_alternatives": []
 }

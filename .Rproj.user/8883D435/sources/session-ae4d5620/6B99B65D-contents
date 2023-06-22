@@ -89,3 +89,7 @@ opt<-minimizR(x,                    #initial parameters values
 ```{r outb}
 print(opt)
 ```
+
+
+
+
