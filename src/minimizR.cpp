@@ -364,6 +364,7 @@ Rcpp::List minimizR(
     Rcpp::NumericVector maxb; //(par.size(), xmax);
 
 
+
     Rcpp::List ctrl(control);
     if (control.isNotNull()) {
         if (ctrl.containsElementNamed("max_iterations")) {
@@ -432,8 +433,8 @@ Rcpp::List minimizR(
     wx.resize(nops);
     best.resize(nops);
     gradient.resize(nops);
-    
-    
+
+
     //if bounded, specify which parameters have numeric bounds
     if (bounded) {
         //        find_r_xmin_xmax(xmin, xmax);
@@ -454,20 +455,20 @@ Rcpp::List minimizR(
 
 
     for (int i = 0; i < nops; i++) {
-     
+
         if (bounded_parameter[i]) {
 
             if (par[i] < minb[i]) {
                 error_stream << "Error: parameter[" << i + 1 << "] less than minb[" << i + 1 << "]. "<<std::endl;
                 error = true;
-               
+
             }
 
             if (par[i] > maxb[i]) {
                 error_stream << "Error: parameter[" << i + 1 << "] greater than maxb[" << i + 1 << "]. "<<std::endl;
                 error = true;
             }
-            
+
             wx[i] = transform_external_2_internal(par[i], minb[i], maxb[i]);
 
         } else {
