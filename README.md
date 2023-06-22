@@ -165,7 +165,7 @@ print(opt)
 ```
 
 
-#Using minimizR with Template Model Builder
+# Using minimizR with Template Model Builder
 
 ## About Template Model Builder
 
