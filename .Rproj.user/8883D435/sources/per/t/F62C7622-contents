@@ -10,9 +10,9 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// minimizR
-Rcpp::List minimizR(Rcpp::NumericVector par, Rcpp::Function fn, Rcpp::Function gr, Rcpp::Nullable<Rcpp::List> control);
-RcppExport SEXP _minimizR_minimizR(SEXP parSEXP, SEXP fnSEXP, SEXP grSEXP, SEXP controlSEXP) {
+// minimize
+Rcpp::List minimize(Rcpp::NumericVector par, Rcpp::Function fn, Rcpp::Function gr, Rcpp::Nullable<Rcpp::List> control);
+RcppExport SEXP _minimizR_minimize(SEXP parSEXP, SEXP fnSEXP, SEXP grSEXP, SEXP controlSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,13 +20,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::Function >::type fn(fnSEXP);
     Rcpp::traits::input_parameter< Rcpp::Function >::type gr(grSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::List> >::type control(controlSEXP);
-    rcpp_result_gen = Rcpp::wrap(minimizR(par, fn, gr, control));
+    rcpp_result_gen = Rcpp::wrap(minimize(par, fn, gr, control));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_minimizR_minimizR", (DL_FUNC) &_minimizR_minimizR, 4},
+    {"_minimizR_minimize", (DL_FUNC) &_minimizR_minimize, 4},
     {NULL, NULL, 0}
 };
 

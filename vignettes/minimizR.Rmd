@@ -31,15 +31,15 @@ gradient <- function(x) {
 #estimated parameters
 x<-c(-1.2, 0)
 
-#minimizR minimizer function
-opt<-minimizR::minimize(x,                    #initial parameters values
-                        objective,            #objective function
-                        gradient,             #gradient function
-                        control = list(       #control list
-                        tolerance = 1e-5,     #convergence criteria
-                        verbose = TRUE,       #print status
-                        iprint = 10))         #print interval
 
+#minimizR function
+opt<-minimizR(x,                   #initial parameters values
+             objective,            #objective function
+             gradient,             #gradient function
+             control = list(       #control list
+             tolerance = 1e-4,     #convergence criteria
+             verbose = TRUE,       #print status
+             iprint = 10))         #print interval
 ```
 
 ## Output
@@ -50,7 +50,8 @@ print(opt)
 
 ## Value Bounded Example
 
-Here is an example of minimizing the Rosenbrock function with value bounded parameters. Note: if "minb" and "maxb" are omitted from the control list, all parameters will be freely estimated.
+
+Here is an example of minimizing the Rosenbrock function. Note, this example uses value bounded parameters. If "lb" and "ub" are omitted from the control list, all parameters will be freely estimated.  
 
 ```{r minb}
 library(minimizR)
@@ -68,16 +69,16 @@ gradient <- function(x) {
 #estimated parameters
 x<-c(-1.2, 0)
 
-#minimizR minimizer function
-opt<-minimizR::minimize(x,                    #initial parameters values
-                        objective,            #objective function
-                        gradient,             #gradient function
-                        control = list(       #control list
-                        tolerance = 1e-8,     #convergence criteria
-                        minb = c(-1.5, -1.5), #min bounds
-                        maxb = c(1.5,1.5),    #max bounds
-                        verbose = TRUE,       #print status
-                        iprint = 10))         #print interval
+#minimizR function
+opt<-minimizR(x,                    #initial parameters values
+              objective,            #objective function
+              gradient,             #gradient function
+              control = list(       #control list
+              tolerance = 1e-4,     #convergence criteria
+              lb = c(-1.5, -1.5),   #lower bounds
+              ub = c(1.5,1.5),      #upper bounds
+              verbose = TRUE,       #print status
+              iprint = 10))         #print interval
 
 ```
 

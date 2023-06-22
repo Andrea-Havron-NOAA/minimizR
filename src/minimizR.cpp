@@ -152,9 +152,9 @@ inline double transform_derivative_internal_2_external(
 //    }
 //
 //    PROTECT(result = Rf_eval(VECTOR_ELT(expression, 0), R_GlobalEnv));
-//    
+//
 //    double xmax_r  = Rcpp::as<double>(result);
-//    
+//
 //
 //}
 
@@ -338,7 +338,7 @@ bool line_search(Rcpp::Function fn,
 
 // [[Rcpp::export]]
 
-Rcpp::List minimize(
+Rcpp::List minimizR(
         Rcpp::NumericVector par,
         Rcpp::Function fn,
         Rcpp::Function gr,
@@ -362,6 +362,7 @@ Rcpp::List minimize(
     Rcpp::List results;
     Rcpp::NumericVector minb; //(par.size(), xmin);
     Rcpp::NumericVector maxb; //(par.size(), xmax);
+
 
 
     Rcpp::List ctrl(control);
@@ -391,14 +392,14 @@ Rcpp::List minimize(
             }
         }
 
-        if (ctrl.containsElementNamed("minb")) {
+        if (ctrl.containsElementNamed("lb")) {
             bounded = true;
-            minb = ctrl["minb"];
+            minb = ctrl["lb"];
         }
 
-        if (ctrl.containsElementNamed("maxb")) {
+        if (ctrl.containsElementNamed("ub")) {
             bounded = true;
-            maxb = ctrl["maxb"];
+            maxb = ctrl["ub"];
         }
 
     }
@@ -432,8 +433,8 @@ Rcpp::List minimize(
     wx.resize(nops);
     best.resize(nops);
     gradient.resize(nops);
-    
-    
+
+
     //if bounded, specify which parameters have numeric bounds
     if (bounded) {
         //        find_r_xmin_xmax(xmin, xmax);
@@ -454,20 +455,20 @@ Rcpp::List minimize(
 
 
     for (int i = 0; i < nops; i++) {
-     
+
         if (bounded_parameter[i]) {
 
             if (par[i] < minb[i]) {
                 error_stream << "Error: parameter[" << i + 1 << "] less than minb[" << i + 1 << "]. "<<std::endl;
                 error = true;
-               
+
             }
 
             if (par[i] > maxb[i]) {
                 error_stream << "Error: parameter[" << i + 1 << "] greater than maxb[" << i + 1 << "]. "<<std::endl;
                 error = true;
             }
-            
+
             wx[i] = transform_external_2_internal(par[i], minb[i], maxb[i]);
 
         } else {
@@ -723,4 +724,3 @@ Rcpp::List minimize(
 
     return results;
 }
-

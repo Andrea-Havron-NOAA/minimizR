@@ -1,0 +1,99 @@
+[
+    {
+        "file": "/Users/mattadmin/rprojects/minimizR/src/minimizR.cpp",
+        "file_last_write": 1684778839.0,
+        "definitions": [
+            {
+                "usr": "c:@F@mgc#&1$@N@std@N@__1@S@valarray>#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "mgc(const std::valarray<double> &)",
+                "file": "/Users/mattadmin/rprojects/minimizR/src/minimizR.cpp",
+                "line": 7,
+                "column": 14,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@norm#&1$@N@std@N@__1@S@valarray>#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "norm(const std::valarray<double> &)",
+                "file": "/Users/mattadmin/rprojects/minimizR/src/minimizR.cpp",
+                "line": 17,
+                "column": 14,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@norm#&1$@N@Rcpp@S@Vector>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "norm(const Rcpp::NumericVector &)",
+                "file": "/Users/mattadmin/rprojects/minimizR/src/minimizR.cpp",
+                "line": 29,
+                "column": 14,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@to_nvector#&1$@N@std@N@__1@S@valarray>#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "to_nvector(const std::valarray<double> &)",
+                "file": "/Users/mattadmin/rprojects/minimizR/src/minimizR.cpp",
+                "line": 41,
+                "column": 21,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@from_nvector#&1$@N@Rcpp@S@Vector>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "from_nvector(const Rcpp::NumericVector &)",
+                "file": "/Users/mattadmin/rprojects/minimizR/src/minimizR.cpp",
+                "line": 49,
+                "column": 23,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@Dot#&1$@N@std@N@__1@S@valarray>#d#S0_#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "Dot(const std::valarray<double> &, const std::valarray<double> &)",
+                "file": "/Users/mattadmin/rprojects/minimizR/src/minimizR.cpp",
+                "line": 63,
+                "column": 14,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@Column#&$@N@std@N@__1@S@valarray>#$@N@std@N@__1@S@valarray>#d#l#l#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "Column(std::valarray<std::valarray<double>> &, size_t, size_t)",
+                "file": "/Users/mattadmin/rprojects/minimizR/src/minimizR.cpp",
+                "line": 79,
+                "column": 29,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@line_search#$@N@Rcpp@S@Function_Impl>#@N@Rcpp@ST>1#T@PreserveStorage#S0_#&d#S1_#&$@N@std@N@__1@S@valarray>#d#S2_#S2_#S2_#S2_#S1_#&I#S4_#b#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "line_search(Rcpp::Function, Rcpp::Function, double &, double &, std::valarray<double> &, std::valarray<double> &, std::valarray<double> &, std::valarray<double> &, std::valarray<double> &, double &, int &, int &, bool)",
+                "file": "/Users/mattadmin/rprojects/minimizR/src/minimizR.cpp",
+                "line": 91,
+                "column": 6,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@minimize#$@N@Rcpp@S@Vector>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#$@N@Rcpp@S@Function_Impl>#@N@Rcpp@ST>1#T@PreserveStorage#S1_#$@N@Rcpp@S@Nullable>#$@N@Rcpp@S@Vector>#VI19#@N@Rcpp@ST>1#T@PreserveStorage#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "minimize(Rcpp::NumericVector, Rcpp::Function, Rcpp::Function, Rcpp::Nullable<Rcpp::List>)",
+                "file": "/Users/mattadmin/rprojects/minimizR/src/minimizR.cpp",
+                "line": 200,
+                "column": 12,
+                "hidden": false
+            }
+        ],
+        "hidden": false
+    }
+]
