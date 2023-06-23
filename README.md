@@ -1,5 +1,5 @@
 # minimizR
-minimizR is a l-bfgs function minimizer that works with freely estimable or value bounded parameter sets.
+minimizR is a l-bfgs function minimizer that works with freely estimable or box constrained parameter sets.
 
 # Install from R
 
