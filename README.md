@@ -221,7 +221,7 @@ obj$fn()
 ## attr(,"logarithm")
 ## [1] TRUE
 ```
-```{r tmb2}
+```r
 obj$gr()
 ```
 ```
