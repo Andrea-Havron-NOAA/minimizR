@@ -3,7 +3,7 @@ minimizR is a l-bfgs function minimizer that works with freely estimable or valu
 
 # Install from R
 
-```
+```r
 remotes::install_github("nmfs-fish-tools/minimizR")
 library(minimizR)
 ```
@@ -14,7 +14,7 @@ library(minimizR)
 
 Here is an example of minimizing the Rosenbrock function with freely estimated parameters.
 
-```{r min}
+```r
 library(minimizR)
 
 #Rosenbrock function
@@ -44,7 +44,7 @@ opt<-minimizR(x,                   #initial parameters values
 
 ## Output
 
-```{r out}
+```r
 print(opt)
 ```
 
@@ -96,7 +96,7 @@ print(opt)
 
 Here is an example of minimizing the Rosenbrock function. Note, this example uses value bounded parameters. If "lb" and "ub" are omitted from the control list, all parameters will be freely estimated.  
 
-```{r minb}
+```r
 library(minimizR)
 
 #Rosenbrock function
@@ -128,7 +128,7 @@ opt<-minimizR(x,                    #initial parameters values
 
 ## Output
 
-```{r outb}
+```r
 print(opt)
 ```
 
@@ -186,7 +186,7 @@ Template Model Builder is a framework that uses Automatic Differentiation to fit
 
 Below is the TMB thetalog example using minimizR. The original code can be found at <https://github.com/kaskr/adcomp/tree/master/tmb_examples>.
 
-```{r tmb}
+```r
 library(minimizR)
 library(TMB)
 compile("tmb_src/thetalog.cpp")
@@ -213,7 +213,7 @@ newtonOption(obj, smartsearch=FALSE)
 
 ## Initial Function Value And Gradient
 
-```{r tmb2}
+```r
 obj$fn()
 ```
 ```
@@ -230,7 +230,7 @@ obj$gr()
 
 ## Run The Minimizer and View The Results
 
-```{r tmb3}
+```r
 #Fit the model
 opt <- minimizR(obj$par, obj$fn, obj$gr, control = list(hessian = TRUE))
 print(opt)
@@ -283,7 +283,7 @@ print(opt)
 
 ## View The SD Report From TMB
 
-```{r tmb4}
+```r
 rep <- sdreport(obj)
 print(rep)
 ```
