@@ -7,6 +7,7 @@
         "-fPIC",
         "-falign-functions=64",
         "-I/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/Rcpp/include",
+        "-I/Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library/RcppEigen/include",
         "-DEIGEN_DONT_VECTORIZE",
         "-I/Library/Developer/CommandLineTools/usr/lib/clang/14.0.3/include",
         "-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1",
@@ -14,9 +15,9 @@
         "-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include",
         "-I/Library/Developer/CommandLineTools/usr/include"
     ],
-    "pch": "Rcpp",
+    "pch": "RcppEigen",
     "is_cpp": true,
-    "hash": "1687467787",
+    "hash": "1687536561",
     "compiler": "5543005649470140914",
     "rversion": "4.3.0",
     "dbversion": 4

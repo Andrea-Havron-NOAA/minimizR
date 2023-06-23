@@ -1,6 +1,7 @@
 
 
 #include <Rcpp.h>
+#include <RcppEigen.h>
 #include <valarray>
 #include <chrono>
 #include <sstream>
@@ -201,6 +202,11 @@ Rcpp::NumericMatrix calculateHessian(Rcpp::Function gradFunc, Rcpp::NumericVecto
     }
 
     return hessian;
+}
+
+double determinant(Rcpp::NumericMatrix matrix){
+    Eigen::Map<Eigen::MatrixXd> D = Rcpp::as<Eigen::Map<Eigen::MatrixXd> >(matrix);
+    return D.determinant();
 }
 
 bool line_search(Rcpp::Function fn,
@@ -520,7 +526,10 @@ Rcpp::List minimizR(
         results["max gradient component"] = maxgc;
         results["gradient"] = rgrad;
         if(do_hessian){
-            results["hessian"] = calculateHessian(gr, rx);
+            Rcpp::NumericMatrix h = calculateHessian(gr, rx);
+            double det = determinant(h);
+            results["hessian"] = h;
+            results["det of hessian"] = det;
         }
         results["parameter values"] = par;
 
@@ -573,7 +582,10 @@ Rcpp::List minimizR(
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
             if(do_hessian){
-                results["hessian"] = calculateHessian(gr, rx);
+                Rcpp::NumericMatrix h = calculateHessian(gr, rx);
+                double det = determinant(h);
+                results["hessian"] = h;
+                results["det of hessian"] = det;
             }
             results["parameter values"] = rx;
 
@@ -666,7 +678,10 @@ Rcpp::List minimizR(
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
             if(do_hessian){
-                results["hessian"] = calculateHessian(gr, rx);
+                Rcpp::NumericMatrix h = calculateHessian(gr, rx);
+                double det = determinant(h);
+                results["hessian"] = h;
+                results["det of hessian"] = det;
             }
             results["parameter values"] = rx;
 
@@ -698,7 +713,10 @@ Rcpp::List minimizR(
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
             if(do_hessian){
-                results["hessian"] = calculateHessian(gr, rx);
+                Rcpp::NumericMatrix h = calculateHessian(gr, rx);
+                double det = determinant(h);
+                results["hessian"] = h;
+                results["det of hessian"] = det;
             }
             results["parameter values"] = rx;
             return results;
@@ -730,7 +748,10 @@ Rcpp::List minimizR(
     results["max gradient component"] = maxgc;
     results["gradient"] = rgrad;
     if(do_hessian){
-        results["hessian"] = calculateHessian(gr, rx);
+        Rcpp::NumericMatrix h = calculateHessian(gr, rx);
+        double det = determinant(h);
+        results["hessian"] = h;
+        results["det of hessian"] = det;
     }
     results["parameter values"] = rx;
 
