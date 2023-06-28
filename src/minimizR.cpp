@@ -6,9 +6,11 @@
 #include <chrono>
 #include <sstream>
 
-const double mgc(const std::valarray<double>& gr) {
+
+
+double mgc(const std::valarray<double>& gr) {
     double maxgc = std::numeric_limits<double>::min();
-    for (int i = 0; i < gr.size(); i++) {
+    for (size_t i = 0; i < gr.size(); i++) {
         if (std::fabs(gr[i]) >= maxgc) {
             maxgc = std::fabs(gr[i]);
         }
@@ -16,10 +18,10 @@ const double mgc(const std::valarray<double>& gr) {
     return maxgc;
 }
 
-const double norm(const std::valarray<double> &v) {
+double norm(const std::valarray<double> &v) {
 
     double ret = 0.0;
-    unsigned int i;
+    size_t i;
     for (i = 0; i < v.size(); i++) {
 
         ret += v[i] * v[i];
@@ -31,7 +33,7 @@ const double norm(const std::valarray<double> &v) {
 const double norm(const Rcpp::NumericVector &v) {
 
     double ret = 0.0;
-    unsigned int i;
+    size_t i;
     for (i = 0; i < v.size(); i++) {
 
         ret += v[i] * v[i];
@@ -42,7 +44,7 @@ const double norm(const Rcpp::NumericVector &v) {
 
 Rcpp::NumericVector to_nvector(const std::valarray<double> &v) {
     Rcpp::NumericVector ret(v.size());
-    for (int i = 0; i < v.size(); i++) {
+    for (size_t i = 0; i < v.size(); i++) {
         ret[i] = v[i];
     }
     return ret;
@@ -50,7 +52,7 @@ Rcpp::NumericVector to_nvector(const std::valarray<double> &v) {
 
 std::valarray<double> from_nvector(const Rcpp::NumericVector &v) {
     std::valarray<double> ret(v.size());
-    for (int i = 0; i < v.size(); i++) {
+    for (size_t i = 0; i < v.size(); i++) {
         ret[i] = v[i];
     }
     return ret;
@@ -62,7 +64,7 @@ std::valarray<double> from_nvector(const Rcpp::NumericVector &v) {
  * @param b
  * @return
  */
-const double Dot(const std::valarray<double> &a,
+double Dot(const std::valarray<double> &a,
         const std::valarray<double> &b) {
     double ret = 0;
     for (size_t i = 0; i < a.size(); i++) {
@@ -85,7 +87,7 @@ const std::valarray<double> Column(
 
     std::valarray<double> ret(length);
 
-    for (int i = 0; i < ret.size(); i++) {
+    for (size_t i = 0; i < ret.size(); i++) {
 
         ret[i] = matrix[i][column];
     }
@@ -181,10 +183,10 @@ void get_working_derivative(double& value,
 }
 
 Rcpp::NumericMatrix calculateHessian(Rcpp::Function gradFunc, Rcpp::NumericVector x, double h = 1e-4) {
-    int n = x.size();
+    size_t n = x.size();
     Rcpp::NumericMatrix hessian(n, n);
 
-    for (int i = 0; i < n; i++) {
+    for (size_t i = 0; i < n; i++) {
         Rcpp::NumericVector x_plus_h = clone(x);
         Rcpp::NumericVector x_minus_h = clone(x);
         double xi = x[i];
@@ -195,7 +197,7 @@ Rcpp::NumericMatrix calculateHessian(Rcpp::Function gradFunc, Rcpp::NumericVecto
         Rcpp::NumericVector grad_plus_h = gradFunc(x_plus_h);
         Rcpp::NumericVector grad_minus_h = gradFunc(x_minus_h);
 
-        for (int j = 0; j < n; j++) {
+        for (size_t j = 0; j < n; j++) {
             double hessian_val = (grad_plus_h[j] - grad_minus_h[j]) / (2 * h);
             hessian(i, j) = hessian_val;
         }
@@ -345,13 +347,13 @@ bool line_search(Rcpp::Function fn,
 // [[Rcpp::export]]
 
 Rcpp::List minimizR(
-        Rcpp::NumericVector par,
-        Rcpp::Function fn,
-        Rcpp::Function gr,
+        Rcpp::NumericVector start,
+        Rcpp::Function objective,
+        Rcpp::Function gradient,
         Rcpp::Nullable<Rcpp::List> control = R_NilValue) {
 
-    std::chrono::time_point<std::chrono::system_clock> start, end;
-    start = std::chrono::system_clock::now();
+    std::chrono::time_point<std::chrono::system_clock> start_, end_;
+    start_ = std::chrono::system_clock::now();
     int max_history = 200;
     int max_iterations = 1000;
     double tolerance = 1e-4;
@@ -364,7 +366,7 @@ Rcpp::List minimizR(
     bool error = false;
     double xmin = -1.0 * std::numeric_limits<double>::max();
     double xmax = std::numeric_limits<double>::max();
-    std::vector<bool> bounded_parameter(par.size(), false);
+    std::vector<bool> bounded_parameter(start.size(), false);
     Rcpp::List results;
     Rcpp::NumericVector minb; //(par.size(), xmin);
     Rcpp::NumericVector maxb; //(par.size(), xmax);
@@ -420,13 +422,13 @@ Rcpp::List minimizR(
     //error checking
     std::stringstream error_stream;
     if (bounded) {
-        if (minb.size() != par.size()) {
+        if (minb.size() != start.size()) {
             Rcpp::Rcout << "Error: minb not equal to size of parameter vector.\n";
             error_stream << "Error: minb not equal to size of parameter vector.\n";
             error = true;
         }
 
-        if (maxb.size() != par.size()) {
+        if (maxb.size() != start.size()) {
             Rcpp::Rcout << "Error: maxb not equal to size of parameter vector.\n";
             error_stream << "Error: maxb not equal to size of parameter vector.\n";
             error = true;
@@ -435,29 +437,29 @@ Rcpp::List minimizR(
 
 
     //begin initialization
-    int nops = par.size();
+    int nops = start.size();
 
-    std::valarray<double> x, wx, best, gradient;
+    std::valarray<double> x, wx, best, gradient_;
 
     x.resize(nops);
     wx.resize(nops);
     best.resize(nops);
-    gradient.resize(nops);
+    gradient_.resize(nops);
 
 
     //if bounded, specify which parameters have numeric bounds
     if (bounded) {
         //        find_r_xmin_xmax(xmin, xmax);
 
-        bounded_parameter.resize(par.size());
+        bounded_parameter.resize(start.size());
         //not all parameters are necessarily bounded.
         std::fill(bounded_parameter.begin(), bounded_parameter.end(), false);
 
         //find the bounded parameters.
-        for (size_t i = 0; i < par.size(); i++) {
+        for (size_t i = 0; i < start.size(); i++) {
             if (minb[i] != xmin || maxb[i] != xmax) {
                 bounded_parameter[i] = true;
-                std::cout <<"parameter "<<i<<" is bounded!\n";
+                Rcpp::Rcout<<"parameter "<<i<<" is bounded!\n";
             }
         }
 
@@ -468,24 +470,24 @@ Rcpp::List minimizR(
 
         if (bounded_parameter[i]) {
 
-            if (par[i] < minb[i]) {
+            if (start[i] < minb[i]) {
                 error_stream << "Error: parameter[" << i + 1 << "] less than minb[" << i + 1 << "]. "<<std::endl;
                 error = true;
 
             }
 
-            if (par[i] > maxb[i]) {
+            if (start[i] > maxb[i]) {
                 error_stream << "Error: parameter[" << i + 1 << "] greater than maxb[" << i + 1 << "]. "<<std::endl;
                 error = true;
             }
 
-            wx[i] = transform_external_2_internal(par[i], minb[i], maxb[i]);
+            wx[i] = transform_external_2_internal(start[i], minb[i], maxb[i]);
 
         } else {
-            wx[i] = par[i];
+            wx[i] = start[i];
         }
-        x[i] = par[i];
-        gradient[i] = 0;
+        x[i] = start[i];
+        gradient_[i] = 0;
     }
 
 
@@ -497,7 +499,7 @@ Rcpp::List minimizR(
 
     //initial evaluation
     double fx(0.0);
-    fx = Rcpp::as<double>(fn(par)); //internal_evaluate(x);
+    fx = Rcpp::as<double>(objective(start)); //internal_evaluate(x);
     function_value = fx;
 
     //Historical evaluations
@@ -511,8 +513,8 @@ Rcpp::List minimizR(
 
 
     //initial gradient
-    gradient = from_nvector(gr(par)); //to_nvector(par)));
-    maxgc = mgc(gradient);
+    gradient_ = from_nvector(gradient(start)); //to_nvector(par)));
+    maxgc = mgc(gradient_);
 
     if (error) {
         results["method"] = "l-bfgs";
@@ -526,12 +528,12 @@ Rcpp::List minimizR(
         results["max gradient component"] = maxgc;
         results["gradient"] = rgrad;
         if(do_hessian){
-            Rcpp::NumericMatrix h = calculateHessian(gr, rx);
+            Rcpp::NumericMatrix h = calculateHessian(gradient, rx);
             double det = determinant(h);
             results["hessian"] = h;
             results["det of hessian"] = det;
         }
-        results["parameter values"] = par;
+        results["parameter values"] = start;
 
         return results;
     }
@@ -551,24 +553,24 @@ Rcpp::List minimizR(
                 wx[j] = transform_external_2_internal(x[j], minb[j], maxb[j]);
                 wg[j] = transform_derivative_internal_2_external(wx[j],
                         minb[j], maxb[j]) *
-                        gradient[j];
+                        gradient_[j];
             } else {
-                wg[j] = gradient[j];
+                wg[j] = gradient_[j];
                 wx[j] = x[j];
             }
         }
 
         if (((i % iprint) == 0) && verbose) {
-            std::cout << "Iteration " << i << "\n";
-            std::cout << "f = " << fx << ", maxgc = " << maxgc << "\n";
+            Rcpp::Rcout << "Iteration " << i << "\n";
+            Rcpp::Rcout << "f = " << fx << ", maxgc = " << maxgc << "\n";
         }
 
 
         if (maxgc < tolerance) {
-            end = std::chrono::system_clock::now();
-            std::chrono::duration<double> elapsed_seconds = end - start;
+            end_ = std::chrono::system_clock::now();
+            std::chrono::duration<double> elapsed_seconds = end_ - start_;
             for (size_t j = 0; j < nops; j++) {
-                rgrad[j] = gradient[j];
+                rgrad[j] = gradient_[j];
                 rx[j] = x[j];
             }
             results["method"] = "l-bfgs";
@@ -582,7 +584,7 @@ Rcpp::List minimizR(
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
             if(do_hessian){
-                Rcpp::NumericMatrix h = calculateHessian(gr, rx);
+                Rcpp::NumericMatrix h = calculateHessian(gradient, rx);
                 double det = determinant(h);
                 results["hessian"] = h;
                 results["det of hessian"] = det;
@@ -638,8 +640,8 @@ Rcpp::List minimizR(
 
         double fv = function_value;
 
-        if (!line_search(fn,
-                gr,
+        if (!line_search(objective,
+                gradient,
                 fx,
                 function_value,
                 x,
@@ -649,20 +651,20 @@ Rcpp::List minimizR(
                 bounded_parameter,
                 best,
                 z,
-                gradient,
+                gradient_,
                 wg,
                 maxgc,
                 iteration,
                 max_iterations,
                 false)) {
-            std::cout << "Max line searches\n\n";
-            end = std::chrono::system_clock::now();
-            std::chrono::duration<double> elapsed_seconds = end - start;
+            Rcpp::Rcout << "Max line searches\n\n";
+            end_ = std::chrono::system_clock::now();
+            std::chrono::duration<double> elapsed_seconds = end_ - start_;
             for (size_t j = 0; j < nops; j++) {
-                rgrad[j] = gradient[j];
+                rgrad[j] = gradient_[j];
                 rx[j] = x[j];
             }
-            maxgc = mgc(gradient);
+            maxgc = mgc(gradient_);
             if (maxgc <= tolerance) {
                 converged = true;
             }
@@ -678,7 +680,7 @@ Rcpp::List minimizR(
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
             if(do_hessian){
-                Rcpp::NumericMatrix h = calculateHessian(gr, rx);
+                Rcpp::NumericMatrix h = calculateHessian(gradient, rx);
                 double det = determinant(h);
                 results["hessian"] = h;
                 results["det of hessian"] = det;
@@ -690,11 +692,11 @@ Rcpp::List minimizR(
         }
 
         if ((fv - function_value) == 0.0 && no_progress_count == 15) {
-            std::cout << "Not progressing...bailing out!\n";
-            end = std::chrono::system_clock::now();
-            std::chrono::duration<double> elapsed_seconds = end - start;
+            Rcpp::Rcout << "Not progressing...bailing out!\n";
+            end_ = std::chrono::system_clock::now();
+            std::chrono::duration<double> elapsed_seconds = end_ - start_;
             for (size_t j = 0; j < nops; j++) {
-                rgrad[j] = gradient[j];
+                rgrad[j] = gradient_[j];
                 rx[j] = x[j];
             }
 
@@ -713,7 +715,7 @@ Rcpp::List minimizR(
             results["max gradient component"] = maxgc;
             results["gradient"] = rgrad;
             if(do_hessian){
-                Rcpp::NumericMatrix h = calculateHessian(gr, rx);
+                Rcpp::NumericMatrix h = calculateHessian(gradient, rx);
                 double det = determinant(h);
                 results["hessian"] = h;
                 results["det of hessian"] = det;
@@ -726,10 +728,10 @@ Rcpp::List minimizR(
 
     }
 
-    end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end - start;
+    end_ = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end_ - start_;
     for (size_t j = 0; j < nops; j++) {
-        rgrad[j] = gradient[j];
+        rgrad[j] = gradient_[j];
         rx[j] = x[j];
     }
 
@@ -748,14 +750,14 @@ Rcpp::List minimizR(
     results["max gradient component"] = maxgc;
     results["gradient"] = rgrad;
     if(do_hessian){
-        Rcpp::NumericMatrix h = calculateHessian(gr, rx);
+        Rcpp::NumericMatrix h = calculateHessian(gradient, rx);
         double det = determinant(h);
         results["hessian"] = h;
         results["det of hessian"] = det;
     }
     results["parameter values"] = rx;
 
-    std::cout << "Max iterations!\n\n";
+    Rcpp::Rcout << "Max iterations!\n\n";
 
     return results;
 }
