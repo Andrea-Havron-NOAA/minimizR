@@ -57,7 +57,7 @@ opt<-minimizR(x,                   #initial parameters values
              verbose = TRUE,       #print status
              iprint = 10,          #print interval
              hessian = TRUE))      #include hessian in the output
-
+print(opt)
 }}
 
 \keyword{optimize}
