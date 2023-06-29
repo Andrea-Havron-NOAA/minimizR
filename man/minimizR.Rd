@@ -31,5 +31,34 @@ Unconstrained and box-constrained optimization using the L-BFGS routine.
  \item{hessian}{If TRUE, the hessian matrix will be included in the output. Default is FALSE. }
   }
 }
+\examples{\donttest{
+library(minimizR)
 
+#Rosenbrock function
+objective <- function(x) {
+  return( 100 * (x[2] - x[1] * x[1])^2 + (1 - x[1])^2 )
+}
+
+#Rosenbrock gradient function
+gradient <- function(x) {
+  return( c( -400 * x[1] * (x[2] - x[1] * x[1]) - 2 * (1 - x[1]), 200 * (x[2] - x[1] * x[1]) ) )
+}
+
+#estimated parameters
+x<-c(-1.2, 0)
+
+
+#minimizR function
+opt<-minimizR(x,                   #initial parameters values
+             objective,            #objective function
+             gradient,             #gradient function
+             control = list(       #control list
+             tolerance = 1e-4,     #convergence criteria
+             verbose = TRUE,       #print status
+             iprint = 10,          #print interval
+             hessian = TRUE))      #include hessian in the output
+
+}}
+
+\keyword{optimize}
 
