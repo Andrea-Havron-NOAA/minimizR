@@ -28,6 +28,8 @@ Unconstrained and box-constrained optimization using the L-BFGS routine.
 
  \item{lb}{numeric vector of lower bounds. Must be the same size as start. }
 
+\item{ub}{numeric vector of upper bounds. Must be the same size as start. }
+
  \item{hessian}{If TRUE, the hessian matrix will be included in the output. Default is FALSE. }
   }
 }
