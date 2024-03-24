@@ -1,0 +1,26 @@
+{
+    "id": "9056844F",
+    "path": "~/minimizR-Testing/numeric_bounds/minimizR/src/minimizR.cpp",
+    "project_path": "src/minimizR.cpp",
+    "type": "cpp",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1687464936857.0,
+    "source_on_save": false,
+    "relative_order": 20,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "339,0",
+        "scrollLine": "335"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1687972810,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1687972810,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -1,0 +1,26 @@
+{
+    "id": "BC5E0817",
+    "path": "~/minimizR-Testing/numeric_bounds/minimizR/vignettes/tmb_src/thetalog.cpp",
+    "project_path": "vignettes/tmb_src/thetalog.cpp",
+    "type": "cpp",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1686081812787.0,
+    "source_on_save": false,
+    "relative_order": 6,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "32,0",
+        "scrollLine": "8"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1686081817,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1686081817081,
+    "read_only": false,
+    "read_only_alternatives": []
+}

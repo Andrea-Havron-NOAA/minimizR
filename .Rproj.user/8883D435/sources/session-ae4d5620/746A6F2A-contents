@@ -1,0 +1,37 @@
+for(i in 1:30){
+  v<-om_output[["L.age"]][["fleet1"]][i,]/sum(om_output[["L.age"]][["fleet1"]][i,])
+  for(j in 1:length(v)){
+    cat(v[j])
+    cat(",")
+    if(j == 6){cat("\n")}
+  }
+  cat("\n")}
+}
+
+
+for( i in 1:30){
+  cat(om_output[["f"]][i])
+  cat(", ")
+}
+
+data(package = "FIMS")
+age_frame <- FIMS::FIMSFrameAge(data_mile1)
+
+fleet_names_agecomp <- dplyr::filter(
+  .data = as.data.frame(age_frame@data),
+  type == "age"
+) %>%
+  dplyr::distinct(name) %>%
+  dplyr::pull(name)
+nagecomp <- length(fleet_names_agecomp)
+
+fleet_names_index <- dplyr::filter(
+  .data = as.data.frame(age_frame@data),
+  type == "index"
+) %>%
+  dplyr::distinct(name) %>%
+  dplyr::pull(name)
+nindex <- length(fleet_names_index)
+
+fleet_names_index[1] <-
+  m_index(age_frame, fleet_names_index[1])

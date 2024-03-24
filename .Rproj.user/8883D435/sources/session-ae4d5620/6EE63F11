@@ -1,0 +1,32 @@
+{
+    "id": "6EE63F11",
+    "path": "~/FIMS-Testing/vignette/FIMS/vignettes/fims-demo.Rmd",
+    "project_path": null,
+    "type": "r_markdown",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1686664052232.0,
+    "source_on_save": true,
+    "relative_order": 8,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "369,0",
+        "scrollLine": "358",
+        "last_setup_crc32": "",
+        "rmdVisualMode": "false",
+        "rmdVisualWrapConfigured": "true",
+        "docOutlineVisible": "1",
+        "rmdVisualModeLocation": "900:482",
+        "rmdVisualCollapsedChunks": ""
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1687281230,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1687281230445,
+    "read_only": false,
+    "read_only_alternatives": []
+}
